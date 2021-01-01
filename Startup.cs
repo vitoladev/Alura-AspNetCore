@@ -25,6 +25,10 @@ namespace aluraaspnetcore
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            Catalogo catalogo = new Catalogo();
+            var livros = catalogo.GetLivros();
+            Relatorio relatorio = new Relatorio(catalogo);
 
             app.UseRouting();
 
@@ -32,7 +36,7 @@ namespace aluraaspnetcore
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Olá mundo!");
+                    await relatorio.Print(context);
                 });
             });
         }
