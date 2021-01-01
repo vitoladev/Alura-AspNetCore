@@ -16,7 +16,27 @@ namespace aluraaspnetcore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ICatalogo, Catalogo>(); // Adicionar um serviço temporário
+            /*****************************
+             * AddTransient
+            // Adiciona uma instância transitória(temporária), toda vez que o GetService for chamado o mecanismo de injeção de dependência
+            vai criar uma nova instância da classe Catalogo pois está como Transient
+            * services.AddTransient<ICatalogo, Catalogo>();
+            * services.AddTransient<IRelatorio, Relatorio>();
+            /*
+             * AddScoped
+             * A cada requisição que houver no navegador, Vai ter uma instância do service dentro da mesma requisição
+             * services.AddScoped<ICatalogo, Catalogo>();
+             * services.AddScoped<IRelatorio, Relatorio>();
+            */
+            /*
+             * É uma instância única que vai existir em toda aplicação, enquanto a aplicação estiver rodando vai ser sempre a mesma instância,
+             * independente da requisição
+            */
+            var catalogo = new Catalogo();
+            services.AddSingleton<ICatalogo>(catalogo);
+            services.AddSingleton<IRelatorio>(new Relatorio(catalogo));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,7 +48,7 @@ namespace aluraaspnetcore
             }
 
             ICatalogo catalogo = serviceProvider.GetService<ICatalogo>();
-            IRelatorio relatorio = new Relatorio(catalogo);
+            IRelatorio relatorio = serviceProvider.GetService<IRelatorio>();
 
             app.UseRouting();
 
