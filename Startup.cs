@@ -16,19 +16,19 @@ namespace aluraaspnetcore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ICatalogo, Catalogo>(); // Adicionar um serviço temporário
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            Catalogo catalogo = new Catalogo();
-            var livros = catalogo.GetLivros();
-            Relatorio relatorio = new Relatorio(catalogo);
+
+            ICatalogo catalogo = serviceProvider.GetService<ICatalogo>();
+            IRelatorio relatorio = new Relatorio(catalogo);
 
             app.UseRouting();
 

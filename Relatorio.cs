@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace aluraaspnetcore
 {
-    public class Relatorio
+    public class Relatorio : IRelatorio
     {
-        private readonly Catalogo Catalogo;
+        private readonly ICatalogo Catalogo;
 
-        public Relatorio(Catalogo catalogo)
+        public Relatorio(ICatalogo catalogo)
         {
             Catalogo = catalogo;
         }
